@@ -1,0 +1,24 @@
+{
+  "navbar": [
+    {
+      "name": "Dashboard",
+      "icon": "",
+      "path": "/"
+    },
+    {
+      "name": "Tables",
+      "path": "/tables",
+      "icon": ""
+    },
+    {
+      "name": "Add table",
+      "path": "/add-table",
+      "icon": ""
+    },
+    {
+      "name": "Reservations",
+      "path": "/reservations",
+      "icon": ""
+    }
+  ]
+}

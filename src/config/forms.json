@@ -1,0 +1,50 @@
+{
+    "forms": {
+        "login": [
+            {
+                "label": "Email",
+                "type": "text",
+                "name": "email",
+                "errorMessage": "Wrong email format"
+            },
+            {
+                "label": "Password",
+                "type": "password",
+                "name": "password",
+                "errorMessage": "Wrong password format"
+            }
+        ],
+        "signup": [
+            {
+                "label": "Nickname",
+                "type": "text",
+                "name": "nick",
+                "errorMessage": "Nick is required"
+            },
+            {
+                "label": "Email",
+                "type": "text",
+                "name": "email",
+                "errorMessage": "Wrong email format"
+            },
+            {
+                "label": "Password",
+                "type": "password",
+                "name": "password",
+                "errorMessage": "Wrong password format"
+            },
+            {
+                "label": "Accept terms",
+                "type": "checkbox",
+                "name": "term"
+            },
+            {
+                "label": "Add your avatar | Optional",
+                "type": "file",
+                "name": "avatar",
+                "errorMessage": "",
+                "required": false
+            }
+        ]
+    }
+}
