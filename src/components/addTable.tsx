@@ -3,34 +3,29 @@ import {useAddTableMutation, useLazyGetTablesQuery, useLazyGetTableByIdQuery, us
 import CustomForm from "../uiComponents/customForm";
 import useNotification from "../hooks/useNotification";
 import {useLoaderData, useNavigate, useParams} from "react-router-dom";
+import {CustomFormInterface} from "../types/customForm";
 
-const AddTable = (props: any) => {
-    const [fieldState, setFieldState] = useState({name: '', seats: 0, image: {}});
+const AddTable = (props: {editMode?: boolean}) => {
+    const [fieldState, setFieldState] = useState<CustomFormInterface>({name: '', seats: 0, image: {}});
     const [formValidState, setFormValidState] = useState({name: false, seats: false, image: false});
-    const [table, setTable] = useState(null);
     const [addTable] = useAddTableMutation()
-    // @ts-ignore
-    const [getTables] = useLazyGetTablesQuery()
-    const [getTable] = useLazyGetTableByIdQuery()
     const [editTable] = useEditTableMutation()
     const {showNotification} = useNotification()
     let {id} = useParams()
     const navigate = useNavigate()
 
-    const response = useLoaderData()
-    const onFormHandler = (fields: any) => {
+    const tableData = useLoaderData() as CustomFormInterface
+    const onFormHandler = (fields: CustomFormInterface) => {
         let fd = new FormData()
 
         for (let key in fields) {
             fd.append(key, fields[key]);
         }
         if (props.editMode) {
-            editTable({id, fd}).then((response: any) => {
+            editTable({id, fd}).then((response:any) => {
                 if (response?.error) {
                     showNotification('Error!', 'error', 'Error')
                 } else {
-                    // @ts-ignore
-                    // getTables()
                     showNotification('Success edit!', 'success', 'Success!')
                 }
             })
@@ -39,8 +34,6 @@ const AddTable = (props: any) => {
                 if (response?.error) {
                     showNotification('Error!', 'error', 'Error')
                 } else {
-                    // @ts-ignore
-                    // getTables()
                     navigate(0)
                     showNotification('Success!', 'success', 'Success!')
                 }
@@ -48,21 +41,11 @@ const AddTable = (props: any) => {
         }
 
     }
-    const LoadTable = () => {
-            const response = useLoaderData()
-        console.log('RESP', response)
-            // @ts-ignore
-            setTable(response.data)
-    }
 
-    // @ts-ignore
     useEffect(() => {
-        console.log('TEST')
         if (props.editMode && id) {
-            // @ts-ignore
-            if (response) {
-                // @ts-ignore
-                setFieldState({name: response.name, seats: response.seats, image: response.image})
+            if (tableData) {
+                setFieldState({name: tableData.name, seats: tableData.seats, image: tableData.image})
                 setFormValidState({name: true, seats: true, image: true})
 
             }

@@ -4,13 +4,14 @@ import {useNavigate} from "react-router-dom";
 import useNotification from "../hooks/useNotification";
 import CustomForm from "../uiComponents/customForm";
 import forms from "../config/forms.json"
+import {CustomFormInterface} from "../types/customForm";
 
 const Login = () => {
     const [login] = useLoginMutation()
     const navigate = useNavigate()
     const { showNotification } = useNotification()
 
-    const onLoginHandler = (fields:any) => {
+    const onLoginHandler = (fields:CustomFormInterface) => {
 
         login({email: fields.email, password: fields.password}).then((response: any) => {
             if (response?.error) {

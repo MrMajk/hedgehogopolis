@@ -6,18 +6,25 @@ import CloseIcon from '@mui/icons-material/Close'
 
 // @ts-ignore
 import validator from 'validator'
-import {useNavigate} from "react-router-dom";
-// @ts-ignore
-const CustomForm = (props) => {
-    const {fieldsState, fieldsData, formValidState} = props
-    const [fields, setFields] = useState(fieldsState)
+import {CustomFormInterface} from "../types/customForm";
+
+interface CustomFormProps {
+    onFormHandler: (fields: CustomFormInterface) => void,
+    fieldsState: CustomFormInterface,
+    fieldsData: CustomFormInterface,
+    formValidState: CustomFormInterface,
+    editMode?: boolean,
+    children?: JSX.Element
+}
+
+const CustomForm = (props: CustomFormProps) => {
+    const {fieldsState, fieldsData, formValidState, children, onFormHandler} = props
+    const [fields, setFields] = useState<CustomFormInterface>(fieldsState)
     const [formValid, setFormValid] = useState(formValidState)
     const [isFormValid, setIsFormValid] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [imageBlob, setImageBlob] = useState('')
+    const [imageBlob, setImageBlob] = useState<string>('')
     useEffect(() => {
         setFields(fieldsState)
-        console.log('FIELDSTATE-HOOK')
         if (fieldsState.image && Object.keys(fieldsState?.image).length > 0) {
             setImageBlob(`http://localhost:8082/uploads/${fieldsState.image}`)
         }
@@ -31,26 +38,23 @@ const CustomForm = (props) => {
 
     const onFormSubmit = (event: React.FormEvent) => {
         event.preventDefault()
-        props.onFormHandler(fields)
-        // if (!props.editMode) {
-            // navigate(0)
-            // console.log(':(')
-            // setFields(fieldsState)
-            // setIsFormValid(false)
-        // }
+        onFormHandler(fields)
     }
 
-    const onChangeFile = (field: any) => (e: any) => {
+    const onChangeFile = (field: CustomFormInterface) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name} = e.target
-        console.log(e.target.files[0])
-        console.log(fields)
-        setFields({...fields, [name]: e.target.files[0]})
-        console.log(fields)
-        setImageBlob(URL.createObjectURL(e.target.files[0]))
-        setFormValid({...formValid, [name]: field?.required ? !validator.isEmpty(e.target.files[0]?.name) : true})
+        const fileData: File = (e.target.files as FileList)[0]
+        if (!validator.isEmpty(fileData?.name)) {
+            setFields({...fields, [name]: fileData})
+            setImageBlob(URL.createObjectURL(fileData))
+            setFormValid({...formValid, [name]: field?.required ? !validator.isEmpty(fileData?.name) : true})
+            console.log('-------------------------')
+            console.log(imageBlob, fields)
+            console.log('-------------------------')
+        }
     }
 
-    const onChangeInput = (field: any) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeInput = (field: CustomFormInterface) => (event: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = event.target
         if (name === 'email') {
             setFormValid({...formValid, [name]: validator.isEmail(value)})
@@ -72,7 +76,7 @@ const CustomForm = (props) => {
         setFormValid(formValidState)
     }, [formValidState])
 
-    const printField = (field: any) => {
+    const printField = (field: CustomFormInterface) => {
         if (field.type === 'text' || field.type === 'number') {
             return (
                 <Input
@@ -106,11 +110,11 @@ const CustomForm = (props) => {
                 } label={field.label}/>
             )
         }
-console.log('IMG: ', imageBlob, Object.keys(fields[field.name]))
         if (field.type === 'file') {
+            console.log(fields[field.name].name?.length)
             return (
-                 <Fragment>
-                     {Object.keys(fields[field.name]).length === 0 &&
+                <Fragment>
+                    {!fields[field.name].name?.length &&
                       <TextField
                         label={field.label}
                         type="file"
@@ -125,7 +129,7 @@ console.log('IMG: ', imageBlob, Object.keys(fields[field.name]))
                       />
                     }
                     {
-                        imageBlob && Object.keys(fields[field.name]).length > 0 &&
+                        imageBlob && fields[field.name].name?.length > 0 &&
 
                       <Card
                         raised
@@ -156,11 +160,10 @@ console.log('IMG: ', imageBlob, Object.keys(fields[field.name]))
     }
 
     return (
-        <Box component="form" onSubmit={ onFormSubmit } noValidate sx={{mt: 1}}>
+        <Box component="form" onSubmit={onFormSubmit} noValidate sx={{mt: 1}}>
             <FormControl>
                 {
-                    // @ts-ignore
-                    fieldsData.map(field => {
+                    fieldsData.map((field:CustomFormInterface) => {
                         return (
                             <Fragment key={field.name}>
                                 {printField(field)}
@@ -168,7 +171,7 @@ console.log('IMG: ', imageBlob, Object.keys(fields[field.name]))
                         )
                     })
                 }
-                {props.children}
+                {children}
                 <Button sx={{marginTop: 2}} disabled={!isFormValid} variant="contained" type="submit">
                     Submit
                 </Button>

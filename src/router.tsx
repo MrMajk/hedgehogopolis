@@ -55,12 +55,8 @@ export const router = createBrowserRouter([
             {
                 path: '/table/:id',
                 loader: async ({params}) => {
-
                     try {
-                        // @ts-ignore
                         const getTableById = store.dispatch(authApiSlice.endpoints.getTableById.initiate(params.id))
-                        console.log('param', params)
-                        // @ts-ignore
                         return await getTableById.unwrap()
                     } catch (e) {
                         console.log('getTable endpoint error: ', e)
