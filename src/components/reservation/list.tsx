@@ -20,13 +20,13 @@ import EventSeatIcon from '@mui/icons-material/EventSeat';
 import {ReservationInterface, ReservationsForListInterface} from "../../types/reservations";
 
 
-export default function ReservationList(props:any) {
+export default function ReservationList(props:{reservations:ReservationInterface[]}) {
     type CountdownHandle = React.ElementRef<typeof ConfirmDialog>;
 
     const {reservations} = props
     const [selectedIndex, setSelectedIndex] = useState("")
     const [selectedSubIndex, setSelectedSubIndex] = useState("")
-    const [formattedReservations, setFormattedReservations] = useState(reservations);
+    const [formattedReservations, setFormattedReservations] = useState<any>(reservations);
     const [reservationIdToRemove, setReservationIdToRemove] = useState<number | null>(null);
     const [removeReservation] = useRemoveReservationMutation()
     const dialogRef = useRef<CountdownHandle | null>(null)
@@ -154,8 +154,6 @@ export default function ReservationList(props:any) {
                                             </ListItem>
                                             <ListItem>
                                                 <ListItemText primary={'REMOVE'}/>
-
-                                                {/*@ts-ignore*/}
                                                 <IconButton aria-label="delete" onClick={() => removeOpenModal(reservation.id)}>
                                                     <DeleteIcon/>
                                                 </IconButton>

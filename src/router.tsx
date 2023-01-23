@@ -24,9 +24,7 @@ export const router = createBrowserRouter([
                 path: '/',
                 loader: async () => {
                     try {
-                        // @ts-ignore
                         const getReservations = store.dispatch(authApiSlice.endpoints.getReservations.initiate())
-                        // @ts-ignore
                         return await getReservations.unwrap()
                     } catch (e) {
                         console.log('get reservations endpoint error: ', e)
@@ -41,7 +39,6 @@ export const router = createBrowserRouter([
             {
                 path: '/tables',
                 loader: async () => {
-                    // @ts-ignore
                     const getTables = store.dispatch(authApiSlice.endpoints.getTables.initiate())
                     try {
                         await getTables.unwrap()
@@ -69,9 +66,7 @@ export const router = createBrowserRouter([
                 loader: async () => {
 
                     try {
-                        // @ts-ignore
                         const getReservations = store.dispatch(authApiSlice.endpoints.getReservations.initiate())
-                        // @ts-ignore
                         return await getReservations.unwrap()
                     } catch (e) {
                         console.log('getTable endpoint error: ', e)

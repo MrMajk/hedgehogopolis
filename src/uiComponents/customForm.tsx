@@ -1,9 +1,8 @@
 import React, {useState, Fragment, useEffect} from "react"
 import Input from "../uiComponents/input"
 import PasswordInput from "../uiComponents/passwordInput"
-import {Box, Button, Card, CardActionArea, CardActions, CardMedia, Checkbox, FormControl, FormControlLabel, IconButton, TextField} from "@mui/material"
+import {Box, Button, Card, CardActionArea, CardMedia, Checkbox, FormControl, FormControlLabel, IconButton, TextField} from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close'
-
 // @ts-ignore
 import validator from 'validator'
 import {CustomFormInterface} from "../types/customForm";
@@ -48,9 +47,6 @@ const CustomForm = (props: CustomFormProps) => {
             setFields({...fields, [name]: fileData})
             setImageBlob(URL.createObjectURL(fileData))
             setFormValid({...formValid, [name]: field?.required ? !validator.isEmpty(fileData?.name) : true})
-            console.log('-------------------------')
-            console.log(imageBlob, fields)
-            console.log('-------------------------')
         }
     }
 

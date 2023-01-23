@@ -5,15 +5,15 @@ import {useDispatch, useSelector} from "react-redux";
 import {setThemeMode} from "../store/themeSlice";
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import {StoreInterface} from "../types/store";
 
 const Header = () => {
     const theme = useTheme()
     const dispatch = useDispatch()
-    const themeMode = useSelector((state: any) => state.theme.mode)
+    const themeMode = useSelector((state: StoreInterface) => state.theme.mode)
 
     const handleChangeTheme = () => {
         const theme = themeMode === 'light' ? 'dark' : 'light'
-        console.log(theme, themeMode)
         dispatch(setThemeMode(theme))
     }
 
@@ -36,7 +36,6 @@ const Header = () => {
             </Box>
         </React.Fragment>
     )
-        ;
 }
 
 export default Header

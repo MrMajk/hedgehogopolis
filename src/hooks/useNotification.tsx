@@ -1,9 +1,10 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setNotification} from "../store/notificationSlice";
+import {StoreInterface} from "../types/store";
 
 const useNotification = () => {
-    const {isActive, type, msg, title} = useSelector((state:any) => state.notification)
+    const {isActive, type, msg, title} = useSelector((state:StoreInterface) => state.notification)
     const dispatch = useDispatch()
 
     useEffect(() => {

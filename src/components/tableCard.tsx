@@ -14,13 +14,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmDialog from "../uiComponents/confirmDialog";
 import {useRemoveTableMutation} from "../store/api/authApiSlice";
 import {useNavigate} from "react-router-dom";
+import {TableInterface} from "../types/table";
 
-const TableCard = (props: any) => {
+interface TableCardProps {
+    loading?: boolean,
+    table: TableInterface
+}
+
+const TableCard = (props: TableCardProps) => {
     type ConfirmDialogHandle = React.ElementRef<typeof ConfirmDialog>;
 
     const {loading = false, table} = props
     const dialogRef = useRef<ConfirmDialogHandle | null>(null)
-    // @ts-ignore
     const [trigger] = useRemoveTableMutation()
     const navigate = useNavigate()
 
@@ -83,7 +88,6 @@ const TableCard = (props: any) => {
                 <IconButton onClick={() => navigate(`/table/${table.id}`)} aria-label="delete">
                     <EditIcon/>
                 </IconButton>
-                {/*@ts-ignore*/}
                 <IconButton aria-label="delete" onClick={() => dialogRef?.current?.handleClickOpen()}>
                     <DeleteIcon/>
                 </IconButton>

@@ -15,13 +15,8 @@ import ConfirmDialog from "../uiComponents/confirmDialog";
 import {Fragment, useEffect, useRef, useState} from "react";
 import {useRemoveReservationMutation} from "../store/api/authApiSlice";
 import ReservationList from "./reservation/list";
-
-interface Data {
-    guestName: string;
-    table: string;
-    startDate: string;
-    endDate: string;
-}
+import {StoreInterface} from "../types/store";
+import {ReservationInterface} from "../types/reservations";
 
 const StyledTableCell = styled(TableCell)(({theme}) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -39,30 +34,26 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
     '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.action.hover,
     },
-    // hide last border
     '&:last-child td, &:last-child th': {
         border: 0,
     },
 }));
 const Reservations = () => {
     type ConfirmDialogHandle = React.ElementRef<typeof ConfirmDialog>;
-
-    const reservations = useSelector((state: any) => state.admin.reservations)
+    const reservations = useSelector((state: StoreInterface) => state.admin.reservations)
     const dialogRef = useRef<ConfirmDialogHandle | null>(null)
     const [removeReservation] = useRemoveReservationMutation()
-    const [filterdReservations, setFilterdReservations] = React.useState(reservations);
-    const [reservationIdToRemove, setReservationIdToRemove] = useState(null);
+    const [filterdReservations, setFilterdReservations] = useState<ReservationInterface[]>(reservations);
+    const [reservationIdToRemove, setReservationIdToRemove] = useState<number|null>(null);
+
     const isMobile = useMediaQuery(useTheme().breakpoints.down('md'))
+
     const removeOpenModal = (id: number) => {
-        console.log('11111')
-        // @ts-ignore
         setReservationIdToRemove(id)
-        // @ts-ignore
         dialogRef?.current?.handleClickOpen()
     }
 
     const removeReservationHandle = () => {
-        console.log('removeReservationHandle')
         removeReservation(reservationIdToRemove)
     }
 
@@ -75,11 +66,10 @@ const Reservations = () => {
         if (event.target.checked) {
             const today = new Date().toDateString()
             console.log(reservations)
-            // @ts-ignore
-            setFilterdReservations(reservations.filter((element) => {
-                console.log(new Date(element.startDate).toDateString(), today)
+            const newData = reservations.filter((element: ReservationInterface) => {
                 return new Date(element.startDate).toDateString() === today
-            }))
+            })
+            setFilterdReservations(newData)
         } else {
             setFilterdReservations(reservations)
         }
@@ -106,7 +96,7 @@ const Reservations = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                      {filterdReservations.map((element: any) => (
+                      {filterdReservations.map((element: ReservationInterface) => (
                           <StyledTableRow key={`table-${element.id}`}>
                               <StyledTableCell align="right">{element.guestName}</StyledTableCell>
                               <StyledTableCell align="right">{element.guestPhone}</StyledTableCell>
@@ -115,7 +105,6 @@ const Reservations = () => {
                               <StyledTableCell align="right">{element.tableName}</StyledTableCell>
                               <StyledTableCell align="right">{element.tableSeats}</StyledTableCell>
                               <StyledTableCell align="right">
-                                  {/*@ts-ignore*/}
                                   <IconButton aria-label="delete" onClick={() => removeOpenModal(element.id)}>
                                       <DeleteIcon/>
                                   </IconButton>
@@ -131,7 +120,7 @@ const Reservations = () => {
                 ref={dialogRef}
               />
             </TableContainer>}
-            {isMobile && <ReservationList reservations={filterdReservations} removeReservation={removeReservationHandle}/>
+            {isMobile && <ReservationList reservations={filterdReservations}/>
             }
         </Fragment>
     );

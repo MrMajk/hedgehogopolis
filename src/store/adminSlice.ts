@@ -1,5 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {authApiSlice} from "./api/authApiSlice";
+import {TableInterface} from "../types/table";
+import {ReservationDBInterface, ReservationInterface} from "../types/reservations";
 
 const initialState = {
     tables: [],
@@ -16,14 +18,13 @@ const adminSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addMatcher(
-            authApiSlice.endpoints.getTables.matchFulfilled, (state, {payload}) => {
+            authApiSlice.endpoints.getTables.matchFulfilled, (state:{tables: TableInterface[]}, {payload}) => {
                 console.log('hello')
                 state.tables = payload
             })
         builder.addMatcher(
-            authApiSlice.endpoints.getReservations.matchFulfilled, (state, {payload}) => {
-                // @ts-ignore
-                const formattedReservations = payload.map(({id, guest_name, guest_phone, start_date, end_date, table }) => ({
+            authApiSlice.endpoints.getReservations.matchFulfilled, (state: {reservations: ReservationInterface[]}, {payload}) => {
+                const formattedReservations = payload.map(({id, guest_name, guest_phone, start_date, end_date, table}:any) => ({
                     id,
                     guestName: guest_name,
                     guestPhone: guest_phone,
@@ -35,15 +36,15 @@ const adminSlice = createSlice({
                 state.reservations = formattedReservations
             })
         builder.addMatcher(
-            authApiSlice.endpoints.removeTable.matchFulfilled, (state:any, {payload}) => {
-                state.tables = state.tables.filter((table:any) => {
+            authApiSlice.endpoints.removeTable.matchFulfilled, (state, {payload}) => {
+                state.tables = state.tables.filter((table:TableInterface) => {
                     return table.id != payload.id
                 })
             })
         builder.addMatcher(
-            authApiSlice.endpoints.removeReservation.matchFulfilled, (state:any, {payload}) => {
+            authApiSlice.endpoints.removeReservation.matchFulfilled, (state, {payload}) => {
                 console.log(payload)
-                state.reservations = state.reservations.filter((reservation:any) => {
+                state.reservations = state.reservations.filter((reservation:ReservationInterface) => {
                     return reservation.id != payload.id
                 })
                 console.log('store: ', state.reservations)

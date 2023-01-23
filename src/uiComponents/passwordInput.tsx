@@ -49,12 +49,9 @@ const PasswordInput = (props: InputProps) => {
                                 { showPassword ? <VisibilityOffIcon/> : <VisibilityIcon />}
                             </IconButton >
                         </InputAdornment>
-                    ),
+                    )
                 }}
             />
-            {/*{isTouching && errorMessage && !isValid && (*/}
-            {/*    <span className="error">{errorMessage}</span>*/}
-            {/*)}*/}
         </React.Fragment>
     )
 }

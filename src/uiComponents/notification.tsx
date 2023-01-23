@@ -2,9 +2,10 @@ import {Alert, AlertTitle, Snackbar} from "@mui/material";
 import {Fragment} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setNotification} from "../store/notificationSlice";
+import {StoreInterface} from "../types/store";
 
 const Notification = () => {
-    const {isActive, msg, title, type} = useSelector((state: any) => state.notification)
+    const {isActive, msg, title, type} = useSelector((state: StoreInterface) => state.notification)
     const dispatch = useDispatch()
     const closeNotificationHandler = () => {
         dispatch(setNotification({

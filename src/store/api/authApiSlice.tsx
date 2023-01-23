@@ -1,4 +1,6 @@
 import {apiReAuthSlice, apiAuthSlice} from './apiSlice'
+import {ReservationInterface} from "../../types/reservations";
+import {TableInterface} from "../../types/table";
 
 export const reAuthApiSlice = apiReAuthSlice.injectEndpoints({
   endpoints: builder => ({
@@ -53,13 +55,13 @@ export const authApiSlice = apiAuthSlice.injectEndpoints({
         body: credentials
       })
     }),
-    getTables: builder.query({
+    getTables: builder.query<TableInterface[], void>({
       query: () => ({
         url: `/tables`,
         method: 'GET'
       })
     }),
-    getReservations: builder.query({
+    getReservations: builder.query<ReservationInterface[], void>({
       query: () => ({
         url: `/reservations`,
         method: 'GET'

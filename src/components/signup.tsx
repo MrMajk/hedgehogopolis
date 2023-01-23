@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import useNotification from '../hooks/useNotification'
 import CustomForm from "../uiComponents/customForm";
 import forms from "../config/forms.json"
+import {CustomFormInterface} from "../types/customForm";
 
 const Signup = () => {
     const [signup] = useSignupMutation()
@@ -12,7 +13,7 @@ const Signup = () => {
     const {showNotification} = useNotification()
 
 
-    const onSignupHandler = (fields:any) => {
+    const onSignupHandler = (fields:CustomFormInterface) => {
         let fd = new FormData()
         for ( let key in fields ) {
             fd.append(key, fields[key]);

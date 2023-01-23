@@ -4,9 +4,10 @@ import {createTheme, ThemeProvider} from "@mui/material";
 import {RouterProvider} from "react-router-dom";
 import {router} from "./router";
 import Notification from "./uiComponents/notification";
+import {StoreInterface} from "./types/store";
 
 function App() {
-    const themeMode = useSelector((state: any) => state.theme.mode)
+    const themeMode = useSelector((state: StoreInterface) => state.theme.mode)
 
     const theme = React.useMemo(
         () =>
@@ -16,7 +17,7 @@ function App() {
                 }
 
             }),
-        [themeMode],
+        [themeMode]
     )
 
     return (

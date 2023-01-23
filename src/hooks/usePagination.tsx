@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
  * @param {Array} data - An Array to be paginated
  * @param {number} itemsPerPage - The number of items per page
  */
-const usePagination = (data:any, itemsPerPage:any) => {
-    const [currentPage, setCurrentPage] = useState(1);
+const usePagination = (data:[], itemsPerPage:number) => {
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const itemCount = data.length;
 
     /**

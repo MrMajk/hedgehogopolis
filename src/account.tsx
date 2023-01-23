@@ -10,6 +10,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
+import {StoreInterface} from "./types/store";
 
 ChartJS.register(
     CategoryScale,
@@ -39,36 +40,32 @@ export const options = {
 }
 
 const Account = () => {
-    const reservations = useSelector((state: any) => state.admin.reservations)
-    const [chartValues, setChartValues] = useState([]);
-    const [chartLabels, setChartLabels] = useState([]);
+    const reservations = useSelector((state: StoreInterface) => state.admin.reservations)
+    const [chartValues, setChartValues] = useState<number[]>([]);
+    const [chartLabels, setChartLabels] = useState<string[]>([]);
 
     useEffect(() => {
-        // @ts-ignore
-        const data = reservations.reduce((res, {startDate}) => {
+        const data = reservations.reduce((res:{[key: string]: number}, {startDate}) => {
             const year = new Date(startDate).getFullYear(),
                 month = new Date(startDate).getMonth()+1
             res[`${year}-${month}`] = (res[`${year}-${month}`] || 0) + 1
             return res
         }, {})
         setChartValues(Array.from(Object.values(data)))
-        // @ts-ignore
         setChartLabels(Array.from(Object.keys(data)))
-        console.log(data, chartValues, chartLabels)
     }, [reservations]);
 
 
 
     return <Bar options={options} data={{
-        // @ts-ignore
         labels:chartLabels,
         datasets: [
             {
                 label: 'Reservation count',
                 data: chartValues
             }
-        ],}
-    } />;
+        ]}
+    } />
 }
 
 export default Account

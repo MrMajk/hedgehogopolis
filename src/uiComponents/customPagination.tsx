@@ -2,14 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Pagination} from "@mui/material";
 
-const CustomPagination = ({
-                         pageCount, onPageChange, currentPage,
-                     }:any) => {
+interface CustomPaginationInterface {
+    pageCount: number,
+    onPageChange: any,
+    currentPage: number
+}
 
+const CustomPagination = ({
+                              pageCount, onPageChange, currentPage,
+                          }: CustomPaginationInterface) => {
     return (
         <div>
             <Pagination
-                // @ts-ignore
                 count={pageCount}
                 onChange={onPageChange}
                 page={currentPage}

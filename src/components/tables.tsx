@@ -1,28 +1,22 @@
 import * as React from 'react'
-import {useGetTablesQuery} from "../store/api/authApiSlice"
 import {useSelector} from "react-redux"
 import {Grid} from '@mui/material'
 import CustomPagination from "../uiComponents/customPagination"
 import usePagination from "../hooks/usePagination"
-import ConfirmDialog from "../uiComponents/confirmDialog";
 import TableCard from "./tableCard";
+import {StoreInterface} from "../types/store";
+import {TableInterface} from "../types/table";
 
-interface MediaProps {
-    loading?: boolean,
-    table: {
-        image: string
-    }
-}
 
 const ITEMS_PER_PAGE = 4;
 
 export default function Tables() {
-    const tables = useSelector((state: any) => state.admin.tables)
+    const tables = useSelector((state: StoreInterface) => state.admin.tables)
     const {
         currentPage, changePage, pageCount,
     } = usePagination(tables, ITEMS_PER_PAGE);
-// @ts-ignore
-    const onPageChange = (event, value) => changePage(value);
+
+    const onPageChange = (event:any, page:number) => changePage(page);
 
     const getCurrentTables = () => {
         const start = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -31,11 +25,12 @@ export default function Tables() {
         return tables.slice(start, end);
     };
 
+
     return (
         <Grid container direction="row"
               justifyContent="center"
               alignItems="center" spacing={2}>
-            {getCurrentTables().map((table: any) =>
+            {getCurrentTables().map((table: TableInterface) =>
                 <Grid item md={6} lg={4}>
                     <TableCard table={table}/>
                 </Grid>
@@ -44,9 +39,6 @@ export default function Tables() {
                   justifyContent="center"
                   alignItems="center" item xs={12}>
                 <CustomPagination
-                    // @ts-ignore
-                    itemCount={tables.length}
-                    itemsPerPage={ITEMS_PER_PAGE}
                     onPageChange={onPageChange}
                     currentPage={currentPage}
                     pageCount={pageCount}

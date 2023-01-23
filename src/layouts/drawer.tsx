@@ -22,13 +22,14 @@ import {useSelector} from "react-redux";
 import config from "../config/config.json"
 import LogoutIcon from '@mui/icons-material/Logout';
 import Cookies from "js-cookie";
+import {StoreInterface} from "../types/store";
 
 const drawerWidth = 240;
 
 
 export default function ResponsiveDrawer() {
     const [mobileOpen, setMobileOpen] = React.useState(false);
-    const user = useSelector((state: any) => state.auth.user)
+    const user = useSelector((state: StoreInterface) => state.auth.user)
 
     const navigate = useNavigate()
     const handleDrawerToggle = () => {
@@ -39,7 +40,6 @@ export default function ResponsiveDrawer() {
     }
 
     const handleLogout = () => {
-        console.log('----111')
         Cookies.remove('access_token')
         Cookies.remove('refresh_token')
         navigate(0)
